@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+	{% block title %}
+		<title>New Event</title>
+	{% endblock %}
+
+	{% block css %}
+	{{block.super}}
+	<link rel="stylesheet" type="text/css" href="{% static 'create-event.css' %}">
+	{% endblock %}
+	
+
+	{% block content %}
+
+  <!-- <form id="regForm" action="{% url 'create-event' %}" method="POST"> -->
+    {% csrf_token %}
+
+      <h1>CREATE EVENT:</h1>
+      
+      <!-- One "tab" for each step in the form: -->
+      <div class="tab">EVENT DETAILS:
+        <p><input type="text" required name = 'name' placeholder="Event name..."  oninput="this.className = '' "></p>
+        <p><input type="text" required name='venue' placeholder="Venue..."  oninput="this.className = '' "></p>
+        <p><input type="number" required name ='age_restriction' placeholder="Age restriction..." oninput="this.className = '' "></p>
+        <p><input type="date" required name ='date' placeholder="Date..." oninput="this.className = '' "></p>
+      </div>
+      
+
+      <!-- TICKETS ARE CREATED DYNAMICALLY WITH JS AND STORED IN  -->
+      <div class="tab">TICKET TYPES (CREATE TICKETS):
+        <button id="create-btn">ADD NEW TICKET</button>
+        <button id="delete-all-btn">Delete All Elements</button>
+        <div id="div-container"></div>
+    
+      </div>
+      
+
+      <div style="overflow:auto;">
+        <div style="float:right;">
+          <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+          <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
+        </div>
+      </div>
+      
+      <button type="submit">CREATE EVENT</button>
+      <!-- Circles which indicates the steps of the form: -->
+      <div style="text-align:center;margin-top:40px;">
+        <span class="step"></span>
+        <span class="step"></span>
+        <span class="step"></span>
+      </div>
+      
+  </form>
+      <script src="{% static 'form.js' %}"></script>
+      <script src="{% static 'tickets.js' %}"></script>
+
+	{% endblock %}

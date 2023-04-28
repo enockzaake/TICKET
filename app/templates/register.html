@@ -1,0 +1,27 @@
+
+{% load static %}
+
+	{% block title %}
+		<title>Register</title>
+	{% endblock %}
+
+	{% block css %}
+	<link rel="stylesheet" type="text/css" href="{% static 'register-login.css' %}">
+	{% endblock %}
+
+	{% block content %}
+	<form class="form">
+		<span class="signup">Register</span>
+		Email
+		<input type="email" placeholder="Email address" class="form--input">
+		Password
+		<input type="password" placeholder="Password" class="form--input">
+		Confirm password
+		<input type="password" placeholder="Confirm password" class="form--input">
+	
+		<button class="form--submit">
+			Sign up
+		</button>
+	</form>
+	{% endblock %}
+

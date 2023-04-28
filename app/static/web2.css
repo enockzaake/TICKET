@@ -1,0 +1,29 @@
+.carousel-item {
+  transition: transform 0.6s ease-in-out;
+}
+.carousel {
+  background-color: #f5f5f5;
+}
+
+.carousel-item {
+  background-color: #f5f5f5;
+}
+/* Example of using Animate.css for carousel transitions */
+.carousel-item {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  animation-name: slideInRight;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translate3d(100%, 0, 0);
+    visibility: visible;
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+
+

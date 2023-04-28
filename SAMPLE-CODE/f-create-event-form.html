@@ -1,0 +1,113 @@
+<style>
+body{
+  display: flex;
+  justify-content: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 950px;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 20px;
+  position: relative;
+  box-shadow: 5px 5px 15px -1px rgba(116, 111, 111, 0.75);
+}
+
+.title {
+  font-size: 28px;
+  color: rgb(205, 195, 213);
+  font-weight: 900;
+  font-family:Arial, Helvetica, sans-serif;
+  margin-left: -550px;
+}
+
+.form label {
+  position: relative;
+}
+
+.form label .input {
+  width:900px;
+  padding: 10px 10px 20px 10px;
+  outline: 0;
+  border: 1px solid rgba(105, 105, 105, 0.397);
+  border-radius: 10px;
+}
+
+.form label .input + span {
+  position: absolute;
+  left: 10px;
+  top: 15px;
+  color: rgb(204, 198, 198);
+  font-size: 0.9em;
+  cursor: text;
+  transition: 0.3s ease;
+}
+
+.form label .input:placeholder-shown + span {
+  top: 15px;
+  font-size: 0.9em;
+}
+
+.form label .input:focus + span,.form label .input:valid + span {
+  top: 30px;
+  font-size: 0.7em;
+  font-weight: 600;
+}
+
+.form label .input:valid + span {
+  color: green;
+}
+
+.submit {
+  border: none;
+  outline: none;
+  background-color: royalblue;
+  padding: 10px;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 16px;
+  transform: .3s ease;
+}
+
+.submit:hover {
+  background-color: rgb(56, 90, 194);
+}
+
+
+
+
+</style>
+
+<form class="form">
+    <p class="title">Add your event details</p>
+    
+    <span>Event name</span>
+    <label>
+        <input required="" placeholder="" type="text" class="input">
+        <span>Event name</span>
+    </label> 
+
+    <span>Event description</span>
+    <label>
+        <input required="" placeholder="" type="text" class="input">
+        <span>description</span>
+    </label> 
+
+    <span>Age restriction</span>
+    <label>
+        <input required="" placeholder="" type="number" min="0" class="input">
+        <span>age</span>
+    </label>
+
+    <span>Event date</span>
+    <label>
+        <input required="" placeholder="" type="date" class="input">
+        <span>date</span>
+    </label>
+    <button class="submit">Submit</button>
+
+</form>
