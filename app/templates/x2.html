@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{%block title%}
+<title>Create Event</title>
+{% endblock%}
+
+{% block content %}
+  <!-- Add Row Buttons -->
+<div class="step2">
+    <div class="mt-4 space-x-2 mx-auto">
+        <button id="paidticket" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+          Add Row 1
+        </button>
+        <button id="freeticket" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+          Add Row 2
+        </button>
+        <button id="donationsticket" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+          Add Row 3
+        </button>
+      </div>
+      <form id="table-form" method="POST" action="">
+        {% csrf_token %}
+        <div class="overflow-x-auto">
+          <table class="table-auto max-w-2xl mx-auto border-collapse border">
+            <thead>
+              <tr>
+                <th class="px-4 py-2">Column 1</th>
+                <th class="px-4 py-2">Column 2</th>
+                <th class="px-4 py-2">Column 3</th>
+                <th class="px-4 py-2">Column 4</th>
+                <th class="px-4 py-2">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="border px-4 py-2">
+                  SAMPLE ROW
+                </td>
+                <td class="border px-4 py-2">
+                  <input type="text" class="w-full border rounded px-2 py-1">
+                </td>
+                <td class="border px-4 py-2">
+                  <input type="text" class="w-full border rounded px-2 py-1">
+                </td>
+                <td class="border px-4 py-2">
+                  <input type="text" class="w-full border rounded px-2 py-1">
+                </td>
+                <td class="border px-4 py-2">
+                  <button class="delete-row bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+              <!-- Add more rows here as needed -->
+            </tbody>
+          </table>
+        </div>
+        <button type="submit" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">SUBMIT</button>
+
+      </form>
+</div>
+
+  <script>
+    function addRowWithData(data) {
+      // Get the table's tbody element
+      const tableBody = document.querySelector("tbody");
+
+      // Create a new row (tr) element
+      const newRow = document.createElement("tr");
+
+      // Add input fields with provided data to the new row
+      newRow.innerHTML = `
+        <td class="border px-4 py-2">
+          ${data[0]}
+        </td>
+        <td class="border px-4 py-2">
+          <input type="text" class="w-full border rounded px-2 py-1" value="${data[1]}">
+        </td>
+        <td class="border px-4 py-2">
+          <input type="text" class="w-full border rounded px-2 py-1" value="${data[2]}">
+        </td>
+        <td class="border px-4 py-2">
+          <input type="text" class="w-full border rounded px-2 py-1" value="${data[3]}">
+        </td>
+        <td class="border px-4 py-2">
+          <button class="delete-row bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Delete
+          </button>
+        </td>
+      `;
+
+      // Append the new row to the table's tbody
+      tableBody.appendChild(newRow);
+    }
+
+    document.getElementById("paidticket").addEventListener("click", function () {
+      const data = ["PAID TICKET", "Row 1 Col 2", "Row 1 Col 3", "Row 1 Col 4"];
+      addRowWithData(data);
+    });
+
+    document.getElementById("freeticket").addEventListener("click", function () {
+      const data = ["FREE TICKET", "Row 2 Col 2", "Row 2 Col 3", "Row 2 Col 4"];
+      addRowWithData(data);
+    });
+
+    document.getElementById("donationsticket").addEventListener("click", function () {
+      const data = ["DONATIONS TICKET", "Row 3 Col 2", "Row 3 Col 3", "Row 3 Col 4"];
+      addRowWithData(data);
+    });
+
+    document.addEventListener("click", function (event) {
+      // Check if the clicked element is a delete button
+      if (event.target.classList.contains("delete-row")) {
+        // Find the parent row (tr) of the clicked button
+        const row = event.target.closest("tr");
+        if (row) {
+          // Remove the row from the table
+          row.remove();
+        }
+      }
+    });
+  </script>
+<script>
+  document.getElementById("table-form").addEventListener("submit", function (event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    
+
+    // Remove the CSRF token from the FormData to avoid duplicates
+    // formData.delete('csrfmiddlewaretoken');
+
+    // Convert the FormData to an array of key-value pairs
+    const dataArray = Array.from(formData);
+    
+
+    // Convert the data array to an object for easier handling in the Django view
+    const dataObject = {};
+    dataArray.forEach(([key, value]) => {
+      dataObject[key] = value;
+    });
+
+    // Convert the object to a JSON string to send as a single value
+    const jsonData = JSON.stringify(dataObject);
+
+    localStorage.setItem('data',JSON.stringify(jsonData))
+
+    // Create a new input field to send the JSON data with the form submission
+    const dataInput = document.createElement('input');
+    dataInput.type = 'hidden';
+    dataInput.name = 'table-data';
+    dataInput.value = jsonData;
+    event.target.appendChild(dataInput);
+
+    // Submit the form with the updated data
+    event.target.submit();
+  });
+
+  // ... Add Row buttons click event listeners ...
+</script>
+
+{% endblock%}

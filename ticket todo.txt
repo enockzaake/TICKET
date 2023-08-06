@@ -1,0 +1,6 @@
+1. Admin to edit event,delete/archive event # try draft mode
+2.Make all fields required
+3.Admin payment details ( required for event to be live)
+4.Transactions table
+5. Admin history of tickets sold
+6.

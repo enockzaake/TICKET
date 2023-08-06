@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+
+{%block title%}
+<title>Create Event</title>
+{% endblock%}
+
+{% block content %}
+
+
+<section>
+
+  <div class="max-w-2xl  mx-auto p-2">
+    <div class="">
+      <button type="button" class="step1btn text-white bg-blue-900 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-4 py-2 text-center mr-3 md:mr-0">EVENT INFO</button> 
+      <button type="button" class="step2btn text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm px-4 py-2 text-center mr-3 md:mr-0">TICKETS</button> 
+    </div>
+    <form method="POST" id="formdata" class="p-1" action="{% url 'create-event' %}" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="step1 space-y-1">
+        <div>
+          <label for="name" class="block text-md font-medium text-gray-700">Event name</label>
+          <input type="text" id="name" name="name" placeholder="Enter event name" class="mt-1 p-2 block w-full h-10 border-gray-300 rounded-sm focus:ring-indigo-100 sm:text-sm">
+        </div>
+        <div>
+          <label for="event_description" class="block text-sm font-medium text-gray-700">Event Description</label>
+          <textarea id="event_description" name="event_description" placeholder="Enter the event description" class="mt-1 block w-full h-36 border-gray-300 rounded-sm  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+        </div>
+        <div>
+          <label for="start_datetime" class="block text-sm font-medium text-gray-700">Start Date and Time</label>
+          <input type="datetime-local" id="start_datetime" name="start_datetime" class="mt-1 p-2 block w-full h-10 border-gray-300 rounded-sm  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" onchange="formatDateTime(this)">
+        </div>
+        <div>
+          <label for="end_datetime" class="block text-sm font-medium text-gray-700">End Date and Time</label>
+          <input type="datetime-local" id="end_datetime" name="end_datetime" class="mt-1 block w-full h-10 border-gray-300 rounded-sm  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" >
+        </div>
+        <div>
+          <label for="venue" class="block text-sm font-medium text-gray-700">Venue</label>
+          <input type="text" id="venue" name="venue" placeholder="Enter the event venue" class="mt-1 p-2 block w-full h-10 border-gray-300 rounded-sm  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        </div>
+        <div>
+          <label for="event_banners" class="block text-sm font-medium text-gray-700">Event Banners</label>
+          <input type="file" id="event_banners" name="event_banner" class="block w-full h-10 cursor-pointer  border-gray-300 rounded-sm  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+          <div id="image-preview" class="flex items-center justify-center w-full mt-4">
+            <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg  bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                    <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                    </svg>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                </div>
+            </label>
+        </div> 
+        </div>
+        <div>
+          <label for="age_restriction" class="block text-sm font-medium text-gray-700">Age Restriction</label>
+          <input type="text" id="age_restriction" name="age_restriction" placeholder="Enter age restriction (if any)" class="mt-1 p-2 block w-full h-10 border-gray-300 rounded-md  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+        </div>
+
+      </div>
+      <div class="step2" hidden>
+        <!-- BUTTONS FOR ADDING TICKETS -->
+
+        <div class="mt-4 space-x-2 mx-auto">
+            <button type="button" id="paidticket" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+              ADD PAID
+            </button>
+            <button type="button" id="freeticket" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+              ADD FREE
+            </button>
+            <button type="button" id="donationsticket" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+              ADD DONATIONS
+            </button>
+          </div>
+          
+            <table class="table-auto mx-auto border-collapse border">
+              <thead>
+                <tr>
+                    <th
+                        class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                        Name</th>
+                    <th
+                        class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                        Tickets name</th>
+                    <th
+                        class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                        Status</th>
+                    <th
+                        class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                        Edit</th>
+                    <th
+                        class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+                        Delete</th>
+                </tr>
+            </thead>
+              <tbody>
+                <!-- Add more rows here as needed -->
+              </tbody>
+            </table>
+          </div>
+    </div>
+    <div>
+      <button type="submit" class="w-full inline-flex justify-center py-2 px-4 mt-10 border border-transparent  text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Submit</button>
+    </div>
+    </form>
+</div>
+</section>
+
+<script>
+  document.querySelector('.step1btn').addEventListener('click',()=>{
+    document.querySelector('.step1').removeAttribute('hidden','hidden');
+    document.querySelector('.step2').setAttribute('hidden','hidden');
+  })
+  document.querySelector('.step2btn').addEventListener('click',()=>{
+    document.querySelector('.step1').setAttribute('hidden','hidden');
+    document.querySelector('.step2').removeAttribute('hidden','hidden');
+  })
+</script> 
+
+
+<!-- STEP 2 SCRIPT -->
+<script>
+  function addRowWithData(data) {
+    // Get the table's tbody element
+    const tableBody = document.querySelector("tbody");
+
+    // Create a new row (tr) element
+    const newRow = document.createElement("tr");
+
+    // Add input fields with provided data to the new row
+    newRow.innerHTML = `
+      <td class="border px-4 py-2">
+        ${data[0]}
+      </td>
+      <td class="border px-4 py-2">
+        <input type="text" class="w-full border rounded px-2 py-1" name="${data[1]}">
+      </td>
+      <td class="border px-4 py-2">
+        <input type="text" class="w-full border rounded px-2 py-1" name="${data[2]}">
+      </td>
+      <td class="border px-4 py-2">
+        <input type="text" class="w-full border rounded px-2 py-1" name="${data[3]}">
+      </td>
+      <td class="border px-4 py-2">
+        <button class="delete-row bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+          Delete
+        </button>
+      </td>
+    `;
+    
+    // Append the new row to the table's tbody
+    tableBody.appendChild(newRow);
+  }
+
+  document.getElementById("paidticket").addEventListener("click", function () {
+    const data = ["PAID TICKET", "paid", "paidprice", "paidquantity"];
+    addRowWithData(data);
+  });
+
+  document.getElementById("freeticket").addEventListener("click", function () {
+    const data = ["FREE TICKET", "free", "freeprice", "freequantity"];
+    addRowWithData(data);
+  });
+
+  document.getElementById("donationsticket").addEventListener("click", function () {
+    const data = ["DONATIONS TICKET", "donations", "donationsprice", "donationsquantity"];
+    addRowWithData(data);
+  });
+
+  document.addEventListener("click", function (event) {
+    // Check if the clicked element is a delete button
+    if (event.target.classList.contains("delete-row")) {
+      // Find the parent row (tr) of the clicked button
+      const row = event.target.closest("tr");
+      if (row) {
+        // Remove the row from the table
+        row.remove();
+      }
+    }
+  });
+</script>
+
+
+<!-- preview image -->
+<script>
+    // Function to preview the selected image
+    function previewImage() {
+      var fileInput = document.getElementById('event_banners');
+      var imagePreview = document.getElementById('image-preview');
+
+      // Check if a file is selected
+      if (fileInput.files && fileInput.files[0]) {
+        var reader = new FileReader();
+
+        // When the file is read, set the image source and display it
+        reader.onload = function(e) {
+          var img = new Image();
+          img.src = e.target.result;
+
+          // Set the width and height attributes
+          img.onload = function() {
+            // var maxWidth = 500;
+            // var maxHeight = 500;
+            // var width = img.width;
+            // var height = img.height;
+
+            // // Calculate the new dimensions if necessary
+            // if (width > maxWidth || height > maxHeight) {
+            //   var ratio = Math.min(maxWidth / width, maxHeight / height);
+            //   width = Math.round(width * ratio);
+            //   height = Math.round(height * ratio);
+            // }
+
+            // // Create the img element with width and height attributes
+            // var imgElement = '<img src="' + img.src + '" width="' + width + '" height="' + height + '" class="max-w-full max-h-full">';
+
+            // // Display the image
+            imagePreview.innerHTML = `<img src="${img.src}" class="w-full h-full">`;
+          };
+        };
+
+        // Read the image file as a data URL
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        // If no file is selected, clear the image preview
+        imagePreview.innerHTML = '';
+      }
+    }
+
+    // Attach the previewImage function to the change event of the file input
+    document.getElementById('event_banners').addEventListener('change', previewImage);
+  </script>
+<!-- format date -->
+<script>
+function formatDateTime(inputField) {
+  // Get the entered datetime value
+  const datetime = inputField.value;
+  
+  // Convert to the desired format: 'YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]'
+  const dateObj = new Date(datetime);
+  const formattedDateTime = dateObj.toISOString().slice(0, 19).replace('T', ' ');
+
+  // Update the input field value
+  inputField.value = formattedDateTime;
+}
+
+</script>
+
+
+{% endblock %}

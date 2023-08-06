@@ -1,59 +1,63 @@
 {% extends "base.html" %}
 
-{% load static %}
+{%block title%}
+<title>All Events</title>
+{% endblock%}
 
-	{% block title %}
-		<title>New Event</title>
-	{% endblock %}
+{% block content %}
 
-	{% block css %}
-	{{block.super}}
-	<link rel="stylesheet" type="text/css" href="{% static 'create-event.css' %}">
-	{% endblock %}
-	
+<section class="">
+    <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+        <h2 class="mb-4 text-xl font-bold text-gray-900">Add your event details</h2>
+        <form action="#" class="">
+            <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+                <div class="sm:col-span-2">
+                    <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Event Name</label>
+                    <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
 
-	{% block content %}
+                <div class="sm:col-span-2">
+                    <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Event Description</label>
+                    <textarea id="description" rows="8" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Your description here"></textarea>
+                </div>
+                <div>
+                    <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Age restriction</label>
+                    <select id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                        <option selected="">Select category</option>
+                        <option value="TV">16+</option>
+                        <option value="PC">18+</option>
+                        <option value="GA">Couples</option>
+                    </select>
+                </div>
+                </div>
+                <div class="sm:col-span-2">
+                    <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Venue Name</label>
+                    <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div class="sm:col-span-2">
+                    <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Venue Address</label>
+                    <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                </div>
+                <div>
+                    <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Event category</label>
+                    <select id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                        <option selected="">Select category</option>
+                        <option value="TV">Music</option>
+                        <option value="PC">Charity</option>
+                        <option value="GA">Travel</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid place-items-center">
+            <button type="submit" class="inline-flex items-center text-black bg-gray-200 px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium
+                        text-center dark:text-white dark:bg-cyan-900 rounded-lg focus:ring-4 focus:ring-primary-200 
+                        dark:focus:ring-primary-900 hover:bg-primary-800">
+                Create Event
+            </button>
+            </div>
 
-  <!-- <form id="regForm" action="{% url 'create-event' %}" method="POST"> -->
-    {% csrf_token %}
+        </form>
+    </div>
+</section>
 
-      <h1>CREATE EVENT:</h1>
-      
-      <!-- One "tab" for each step in the form: -->
-      <div class="tab">EVENT DETAILS:
-        <p><input type="text" required name = 'name' placeholder="Event name..."  oninput="this.className = '' "></p>
-        <p><input type="text" required name='venue' placeholder="Venue..."  oninput="this.className = '' "></p>
-        <p><input type="number" required name ='age_restriction' placeholder="Age restriction..." oninput="this.className = '' "></p>
-        <p><input type="date" required name ='date' placeholder="Date..." oninput="this.className = '' "></p>
-      </div>
-      
-
-      <!-- TICKETS ARE CREATED DYNAMICALLY WITH JS AND STORED IN  -->
-      <div class="tab">TICKET TYPES (CREATE TICKETS):
-        <button id="create-btn">ADD NEW TICKET</button>
-        <button id="delete-all-btn">Delete All Elements</button>
-        <div id="div-container"></div>
-    
-      </div>
-      
-
-      <div style="overflow:auto;">
-        <div style="float:right;">
-          <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
-          <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
-        </div>
-      </div>
-      
-      <button type="submit">CREATE EVENT</button>
-      <!-- Circles which indicates the steps of the form: -->
-      <div style="text-align:center;margin-top:40px;">
-        <span class="step"></span>
-        <span class="step"></span>
-        <span class="step"></span>
-      </div>
-      
-  </form>
-      <script src="{% static 'form.js' %}"></script>
-      <script src="{% static 'tickets.js' %}"></script>
-
-	{% endblock %}
+{% endblock %}

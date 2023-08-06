@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="cart" id="cart">
+        <div class="total">
+            CART TOTAL:<span class="cart_total"></span>
+        </div>
+    </div>
+   
+    <template id="ticket">
+        <div class="cart_item" id="cart_item" style="display: flex;">
+            <span class="cart_item_price">20000</span>
+            <button type="button" id="decrease_btn" style="cursor: pointer;">-</button>
+               <span class="item_count" style="background: rgb(215, 211, 211);width: 20px;display: flex;justify-content: center;">0</span>
+            <button type="button" id="increase_btn" style="cursor: pointer;">+</button>
+            Total:<span class="cart_item_total">0</span>
+        </div><br>
+    </template>
+
+<script>
+    const template = document.getElementById('ticket');
+    const cart = document.getElementById('cart');
+
+    for(let i=0;i<3;i++){
+        const clone = document.importNode(template.content, true);
+        const cartItem = document.createElement('div');
+        cartItem.append(clone);
+        cart.append(cartItem);
+    }
+
+    const increase_btns = document.querySelectorAll('#increase_btn');
+    const decrease_btns = document.querySelectorAll('#decrease_btn');
+    
+    decrease_btns.forEach((button)=>{
+        button.classList.add('disabled');
+    });
+
+    increase_btns.forEach((button)=>{
+        button.addEventListener('click',()=>{
+            var price = button.parentElement.querySelector('.cart_item_price').textContent;
+            var countElement = button.parentElement.querySelector('.item_count');
+            var count = parseInt(countElement.textContent);
+            count++;
+            countElement.textContent = count;
+            var total = count*price;
+            var item_total = button.parentElement.querySelector('.cart_item_total').textContent = total;
+            var decrease = button.parentElement.querySelector('#decrease_btn'); 
+            decrease.disabled = false;
+            UpdateCartTotal();
+        });
+    });
+
+    decrease_btns.forEach((button)=>{
+        button.addEventListener('click',()=>{
+            var price = button.parentElement.querySelector('.cart_item_price').textContent;
+            var countElement = button.parentElement.querySelector('.item_count');
+            var count = parseInt(countElement.textContent);
+            count--;
+            countElement.textContent = count;
+            var total = count*price;
+            var item_total = button.parentElement.querySelector('.cart_item_total').textContent = total;
+            // var decrease = button.parentElement.querySelector('#decrease_btn'); 
+            button.disabled = count === 0;
+            UpdateCartTotal();
+        });
+    });
+
+function UpdateCartTotal(){
+    var cart_total = 0;
+    var cart_totalElement = document.querySelector('.cart_total');
+    var cart_item_totals = document.querySelectorAll('.cart_item_total');
+    cart_item_totals.forEach((cart_item_total)=>{
+        cart_total += parseInt(cart_item_total.textContent);
+        console.log(cart_total)
+    });
+    cart_totalElement.textContent = cart_total;
+}
+
+</script>
+</body>
+</html>

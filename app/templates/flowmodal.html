@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+
+
+{% block content%}
+
+<!-- Modal toggle -->
+<button data-modal-target="staticModal" data-modal-toggle="staticModal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+    Toggle modal
+</button>
+
+  <!-- Main modal -->
+  <div id="staticModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+      <div class="relative w-full max-w-2xl max-h-full">
+          <!-- Modal content -->
+          <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+              <!-- Modal header -->
+              <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+                  <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                      Tickets
+                  </h3>
+                  <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="staticModal">
+                      <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                      </svg>
+                      <span class="sr-only">Close modal</span>
+                  </button>
+              </div>
+              <!-- Modal body -->
+              <form id="Ticketform" action="{% url 'checkout' %}" method="POST">
+                {% csrf_token %}
+                    <div class="p-6 space-y-6">
+                        <div id="step1" class="step text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                            STEP 1
+                            <div class="p-6 space-y-6">
+                                {% for ticket in event.tickets.all%}
+                                  <div id="ticket-{{ forloop.counter }}" class="ticket justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
+                                      <div class="sm:ml-4 sm:flex sm:w-full sm:justify-between">
+                                        <div class="mt-5 sm:mt-0">
+                                          <h2 class="text-lg font-bold text-gray-900">{{ticket.name}}</h2>
+                                          <p class="ticket_price mt-1 text-xs text-gray-700">{{ticket.price}}</p>
+                                        </div>
+                                        <div class="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
+                                          <div class="flex items-center border-gray-100">
+                                            <button class="decrease_btn cursor-pointer rounded-l bg-gray-200 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50 disabled:hover:bg-slate" type="button"> - </button>
+                                            <span class="item_count rounded-l bg-gray-50 py-1 px-3.5 duration-100"> 0 </span>
+                                            <button class="increase_btn cursor-pointer rounded-r bg-gray-200 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50" type="button"> + </button>
+                                          </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                {% endfor%}
+                            </div>
+                <!-- order summary -->
+                <div class="price-info flex flex-col w-1/2">
+                    <!-- summary header -->
+                    <div class="summary-header w-full bg-green-950">
+                        <span>Summary</span>
+                        <span>QTY</span> 
+                        <span>Amount</span>
+                    </div>
+                    {% for ticket in event.tickets.all%}
+                    <div class="ticket-{{ forloop.counter }} summary-content flex">
+                        <span class="m-1">Ticket #{{ forloop.counter }} {{ticket.name}}</span>,
+                        <span class="ticket-qty m-1">0</span>,
+                        <span class="ticket-amount m-1">0</span>
+                    </div>
+                    {% endfor%}
+
+                    Ticket quantity:<span id="cart_total_count">0</span>
+                    Total:UGX.<span id="cart_total_amount">0</span>
+
+                </div>
+                        </div>
+                        <div id="step2" class="step hidden text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                            <div id="info" class="overflow-y-scroll h-96"></div>
+                        </div>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+                        <button id="prev" type="button" onclick="prevStep('step1')" class="hidden text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Back</button>
+                        <button id="next" type="button" onclick="nextStep('step2')" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Next</button>
+                    </div>
+              </form>
+          </div>
+      </div>
+  </div>
+  
+
+<!-- MODAL NAVIGATION -->
+<script>
+    function nextStep(nextStepId) {
+      document.getElementById(nextStepId).classList.remove('hidden');
+      document.getElementById('step1').classList.add('hidden');
+      document.getElementById('prev').classList.remove('hidden');
+      document.getElementById('next').innerHTML = 'Next';
+      document.getElementById('next').setAttribute('type', 'button');
+      document.getElementById('next').innerHTML = 'Continue';
+      document.getElementById('next').addEventListener('click', submitForm);
+    }
+  
+    function prevStep(prevStepId) {
+      document.getElementById(prevStepId).classList.remove('hidden');
+      document.getElementById('step2').classList.add('hidden');
+      document.getElementById('prev').classList.add('hidden');
+      document.getElementById('next').innerHTML = 'Next';
+      document.getElementById('next').setAttribute('type', 'button');
+      document.getElementById('next').innerHTML = 'Next';
+      document.getElementById('next').removeEventListener('click', submitForm);
+    }
+  
+    function submitForm() {
+      document.getElementById('Ticketform').submit();
+    }
+</script>
+  <!-- MODAL CALCULATIONS -->
+<script>
+    const increase_btns = document.querySelectorAll('.increase_btn');
+    const decrease_btns = document.querySelectorAll('.decrease_btn');
+    const priceInfo = document.querySelector('.price-info');
+    
+
+    increase_btns.forEach((button)=>{
+        button.addEventListener('click',()=>{
+          var price = button.closest('.ticket').querySelector('.ticket_price').textContent;
+          var itemCount = button.parentElement.querySelector('.item_count');
+          const parent_id = button.closest('.ticket').id;
+          var ticketSummary = document.querySelector(`.${parent_id}`);
+        
+          var count = parseInt(itemCount.textContent);
+          count++;
+          itemCount.textContent = count;
+          var total = count*price;
+          ticketSummary.querySelector('.ticket-qty').innerHTML = count;
+          ticketSummary.querySelector('.ticket-amount').innerHTML = total;
+
+
+        UpdateCartTotal();
+        updateTicketTypes();
+        });
+    });
+
+    decrease_btns.forEach((button)=>{
+        button.addEventListener('click',()=>{
+            var price = button.closest('.ticket').querySelector('.ticket_price').textContent;
+            var itemCount = button.parentElement.querySelector('.item_count');
+            const parent_id = button.closest('.ticket').id;
+            var ticketSummary = document.querySelector(`.${parent_id}`);
+          
+            var count = parseInt(itemCount.textContent);
+            count--;
+            itemCount.textContent = count;
+            var total = count*price;
+            ticketSummary.querySelector('.ticket-qty').innerHTML = count;
+            ticketSummary.querySelector('.ticket-amount').innerHTML = total;
+            button.disabled = count === 0;
+            UpdateCartTotal();
+            updateTicketTypes();
+        });
+    });
+
+
+    // Cart summary
+    function UpdateCartTotal(){
+        var totalTicketQunatity = 0;
+        var totalTicketsAmount = 0;
+        const ticketCountElements = document.querySelectorAll('.item_count'); // check on using var or const in future in case of variable ticket count
+        const totalAmountElements = document.querySelectorAll('.ticket-amount');
+        ticketCountElements.forEach(count=>{
+            totalTicketQunatity += parseInt(count.innerHTML)
+        });
+
+        totalAmountElements.forEach(count=>{
+            totalTicketsAmount += parseInt(count.innerHTML);
+        });
+        document.querySelector('#cart_total_count').innerHTML = totalTicketQunatity;
+        document.querySelector('#cart_total_amount').innerHTML = totalTicketsAmount;
+
+    }
+
+    function updateTicketTypes(){
+        var ticketTypes = {};
+        var count = document.querySelectorAll('.ticket').length;
+        for(let num = 1 ;num<=count;num++){
+            ticketTypes[`ticket-${num}`] = parseInt(document.querySelector(`.ticket-${num}`).querySelector('.ticket-qty').innerHTML);
+        }
+        userInfo(ticketTypes);
+    }
+
+    // Customer info
+    function userInfo(ticketTypes){
+        const infoDiv = document.getElementById('info');
+        infoDiv.innerHTML = '';
+        
+        for(let key in ticketTypes){
+            if(ticketTypes[key] !== 0){
+                const title = `<div"> ${key} </div>`;
+                infoDiv.innerHTML += title;
+            }
+            for (let i = 0; i < ticketTypes[key]; i++) {
+                const divContent = `
+                    <div style="width: 100%; height: 80px; background: blue;margin-bottom:5px">
+                    A DIV FOR USER 
+                    </div>
+                `;
+                infoDiv.innerHTML += divContent;
+                }
+            }
+    }
+
+    
+</script>
+  
+  
+{% endblock %}

@@ -1,0 +1,127 @@
+
+    <template id="paidtemplate">
+        PAID TICKET
+        <div class="flex p-1 rounded-md bg-black">
+            <input type="text" id="first_name" class="m-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="John" required>
+            <input type="text" id="first_name" class="m-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="John" required>
+            <input type="text" id="first_name" class="m-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="John" required>
+        </div>
+    </template>
+    <template id="freetemplate">
+        FREE TICKET
+        <div class="flex p-1 rounded-md bg-black">
+            <input type="text" id="first_name" class="m-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="John" required>
+            <input type="text" id="first_name" class="m-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="John" required>
+            <input type="text" id="first_name" class="m-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="John" required>
+        </div>
+    </template>
+    <template id="donationstemplate">
+        DONATIONS TICKET
+        <div class="flex p-1 rounded-md bg-black">
+            <input type="text" id="first_name" class="m-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="John" required>
+            <input type="text" id="first_name" class="m-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="John" required>
+            <input type="text" id="first_name" class="m-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="John" required>
+        </div>
+    </template>
+<!-- start -->
+    <section class="bg-white dark:bg-gray-900 ">
+        <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+            <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Add your event details</h2>
+            <form action="#">
+                <div class="flex ml-4 rounded-md">
+                    <span class="mx-4">TICKET TYPE</span>
+                    <span class="mx-4">TICKET NAME</span>
+                    <span class="mx-4">TICKET PRICE</span>
+                    <span class="mx-4">QUANTITY</span>
+                </div>
+                <div class="p-4 bg-red-500" id="ticketscontainer">
+    
+                </div>
+
+            </form>
+            <button type="submit" id="paid" class="inline-flex items-center text-black bg-gray-200 px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium
+            text-center dark:text-white dark:bg-cyan-900 rounded-lg focus:ring-4 focus:ring-primary-200 
+            dark:focus:ring-primary-900 hover:bg-primary-800">
+            Add Paid ticket
+            </button>   
+            <button type="submit" id="free" class="inline-flex items-center text-black bg-gray-200 px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium
+            text-center dark:text-white dark:bg-cyan-900 rounded-lg focus:ring-4 focus:ring-primary-200 
+            dark:focus:ring-primary-900 hover:bg-primary-800">
+            Add free ticket
+            </button>   
+            <button type="submit" id="donations" class="inline-flex items-center text-black bg-gray-200 px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium
+            text-center dark:text-white dark:bg-cyan-900 rounded-lg focus:ring-4 focus:ring-primary-200 
+            dark:focus:ring-primary-900 hover:bg-primary-800">
+            Collect donations
+            </button>   
+        </div>
+      </section>
+
+    <script>
+        const paidButton = document.getElementById('paid');
+        const freeButton = document.getElementById('free');
+        const donationsButton = document.getElementById('donations');
+        const container = document.getElementById('ticketscontainer');
+        const paidtemplate = document.getElementById('paidtemplate');
+        const freetemplate = document.getElementById('freetemplate');
+        const donationstemplate = document.getElementById('donationstemplate');
+        
+        paidButton.addEventListener('click', function() {
+          // Clone the template content
+          const clone = document.importNode(paidtemplate.content, true);
+          const newdiv = document.createElement('div');
+          newdiv.classList.add('flex');
+          newdiv.classList.add('bg-gray-400');
+          newdiv.append(clone)
+          const deletebtn = document.createElement('button')
+          deletebtn.innerHTML = 'DELETE'
+           
+            deletebtn.addEventListener('click',()=>{
+                const parentdiv = deletebtn.parentElement
+                parentdiv.parentNode.removeChild(parentdiv)
+            })
+
+            newdiv.append(deletebtn)
+          // Append the cloned content to the container
+          container.appendChild(newdiv);
+        });
+
+        freeButton.addEventListener('click', function() {
+          // Clone the template content
+          const clone = document.importNode(freetemplate.content, true);
+          const newdiv = document.createElement('div');
+          newdiv.classList.add('flex');
+          newdiv.append(clone)
+          const deletebtn = document.createElement('button')
+          deletebtn.innerHTML = 'DELETE'
+           
+            deletebtn.addEventListener('click',()=>{
+                const parentdiv = deletebtn.parentElement
+                parentdiv.parentNode.removeChild(parentdiv)
+            })
+
+            newdiv.append(deletebtn)
+          // Append the cloned content to the container
+          container.appendChild(newdiv);
+        });
+
+        donationsButton.addEventListener('click', function() {
+          // Clone the template content
+          const clone = document.importNode(donationstemplate.content, true);
+          const newdiv = document.createElement('div');
+          newdiv.classList.add('flex');
+          newdiv.append(clone)
+          const deletebtn = document.createElement('button')
+          deletebtn.innerHTML = 'DELETE'
+           
+            deletebtn.addEventListener('click',()=>{
+                const parentdiv = deletebtn.parentElement
+                parentdiv.parentNode.removeChild(parentdiv)
+            })
+
+            newdiv.append(deletebtn)
+          // Append the cloned content to the container
+          container.appendChild(newdiv);
+        });
+        
+        </script>

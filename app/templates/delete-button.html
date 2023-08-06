@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<style>
+    body{
+        display: grid;
+        place-items: center;
+    }
+    .button{
+        width:600px;
+        margin: 10px auto 10px auto;
+        padding-right: 30px;
+        height: 100px;
+        background: #e5dfdf;
+        display: flex;
+        align-items: center;
+        justify-content:end;
+
+    }
+</style>
+</head>
+<body>
+    <button id="btn">BUTTON</button>
+    <div id="main">
+    
+        
+    </div>
+
+    <script>
+   
+        const maindiv = document.getElementById('main'); 
+        const createbtn = document.getElementById('btn'); 
+        createbtn.addEventListener('click',()=>{
+            const newdiv = document.createElement('div');
+            newdiv.className = 'button';
+            const deletebtn = document.createElement('button')
+            deletebtn.innerHTML = 'DELETE'
+           
+            deletebtn.addEventListener('click',()=>{
+                const parentdiv = deletebtn.parentElement
+                maindiv.removeChild(parentdiv)
+            })
+
+            newdiv.append(deletebtn)
+            maindiv.appendChild(newdiv)
+
+        })
+        
+    </script>
+</body>
+</html>

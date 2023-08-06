@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div class="container mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-4">Product Cart</h1>
+    <div id="cart-items">
+      <!-- Cart items will be dynamically added here -->
+    </div>
+    <div id="cart-total" class="mt-4">
+      <h2 class="text-xl font-semibold mb-2">Cart Total: <span id="total-amount">$0</span></h2>
+      <button id="checkout-btn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Checkout
+      </button>
+    </div>
+  </div>
+  
+  <script>
+  // Cart data
+let cartItems = [];
+
+// Update cart and total
+function updateCart() {
+  const cartItemsContainer = document.getElementById("cart-items");
+  const totalAmountSpan = document.getElementById("total-amount");
+  let cartTotal = 0;
+
+  // Clear existing cart items
+  cartItemsContainer.innerHTML = "";
+
+  // Generate cart items
+  cartItems.forEach((item) => {
+    const { id, name, price, quantity } = item;
+
+    // Calculate item total
+    const itemTotal = price * quantity;
+    cartTotal += itemTotal;
+
+    // Create cart item element
+    const cartItem = document.createElement("div");
+    cartItem.classList.add("flex", "items-center", "mb-2");
+
+    const itemName = document.createElement("span");
+    itemName.textContent = name;
+    itemName.classList.add("mr-2");
+    cartItem.appendChild(itemName);
+
+    const quantityContainer = document.createElement("div");
+    quantityContainer.classList.add("flex", "items-center", "mr-2");
+
+    const decrementBtn = document.createElement("button");
+    decrementBtn.textContent = "-";
+    decrementBtn.classList.add("bg-gray-300", "px-2", "py-1", "rounded", "mr-1");
+    decrementBtn.addEventListener("click", () => decrementQuantity(id));
+    quantityContainer.appendChild(decrementBtn);
+
+    const quantityText = document.createElement("span");
+    quantityText.textContent = quantity;
+    quantityContainer.appendChild(quantityText);
+
+    const incrementBtn = document.createElement("button");
+    incrementBtn.textContent = "+";
+    incrementBtn.classList.add("bg-gray-300", "px-2", "py-1", "rounded", "ml-1");
+    incrementBtn.addEventListener("click", () => incrementQuantity(id));
+    quantityContainer.appendChild(incrementBtn);
+
+    cartItem.appendChild(quantityContainer);
+
+    const itemTotalText = document.createElement("span");
+    itemTotalText.textContent = `$${itemTotal.toFixed(2)}`;
+    cartItem.appendChild(itemTotalText);
+
+    cartItemsContainer.appendChild(cartItem);
+  });
+
+  // Update total amount
+  totalAmountSpan.textContent = `$${cartTotal.toFixed(2)}`;
+}
+
+// Add item to cart
+function addItemToCart(id, name, price) {
+  const existingItem = cartItems.find((item) => item.id === id);
+
+  if (existingItem) {
+    existingItem.quantity++;
+  } else {
+    const newItem = {
+      id,
+      name,
+      price,
+      quantity: 1,
+    };
+    cartItems.push(newItem);
+  }
+
+  updateCart();
+}
+
+// Increment item quantity
+function incrementQuantity(id) {
+  const item = cartItems.find((item) => item.id === id);
+  if (item) {
+    item.quantity++;
+    updateCart();
+  }
+}
+
+// Decrement item quantity
+function decrementQuantity(id) {
+  const item = cartItems.find((item) => item.id === id);
+  if (item) {
+    if (item.quantity > 1) {
+      item.quantity--;
+    } else {
+      cartItems = cartItems.filter((item) => item.id !== id);
+    }
+    updateCart();
+  }
+}
+
+// Example products
+const products = [
+  { id: 1, name: "Product 1", price: 10 },
+  { id: 2, name: "Product 2", price: 20 },
+  { id: 3, name: "Product 3", price: 15 },
+];
+
+// Add event listeners to product buttons
+const productButtons = document.querySelectorAll(".product-btn");
+productButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const productId = parseInt(button.dataset.productId);
+    const product = products.find((product) => product.id === productId);
+    if (product) {
+      addItemToCart(product.id, product.name, product.price);
+    }
+  });
+});
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../static/src/output.css">
+    <title>Registraion Form</title>
+  </head>
+  <style>
+    :root {
+      --primary-color: rgb(90, 56, 225);
+    }
+
+  
+    /* Global Stylings */
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    
+    /* Progressbar */
+    .progressbar {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      counter-reset: step;
+      margin: 2rem 0 4rem;
+    }
+    
+    .progressbar::before,
+    .progress {
+      content: "";
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 4px;
+      width: 100%;
+      background-color: #dcdcdc;
+      z-index: -1;
+    }
+    
+    .progress {
+      background-color: var(--primary-color);
+      width: 0%;
+      transition: 0.3s;
+    }
+    
+    .progress-step {
+      width: 2.1875rem;
+      height: 2.1875rem;
+      background-color: #dcdcdc;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .progress-step::before {
+      counter-increment: step;
+      content: counter(step);
+    }
+    
+    .progress-step::after {
+      content: attr(data-title);
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      font-size: 0.85rem;
+      color: #666;
+    }
+    
+    .progress-step-active {
+      background-color: var(--primary-color);
+      color: #f3f3f3;
+    }
+    
+    /* Form */
+    .form {
+      width: clamp(1000px, 30%, 430px);
+      height: fit-content;
+      margin: 0 auto;
+      border: 1px solid #ccc;
+      border-radius: 0.35rem;
+      padding: 1.5rem;
+    }
+    
+    .form-step {
+      display: none;
+    }
+    
+    .form-step-active {
+      display: block;
+    }
+  
+    /* Button */
+
+    .btn {
+      padding: 0.75rem;
+      display: block;
+      text-decoration: none;
+      background-color: var(--primary-color);
+      color: #f3f3f3;
+      text-align: center;
+      border-radius: 0.25rem;
+      cursor: pointer;
+    }
+    .btn:hover {
+      box-shadow: 0 0 0 2px #fff, 0 0 0 3px var(--primary-color);
+    }
+  </style>
+    
+  <body>
+    <!-- TICKET TEMPLATES -->
+  <template id="paidtemplate">
+      <div class="sm:col-span-2">
+          <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">PAID TICKET</label>
+          <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name">
+      </div>
+  </template>
+  <template id="freetemplate">
+      <div class="sm:col-span-2">
+          <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">FREE TICKET</label>
+          <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+      </div>
+  </template>
+  <template id="donationstemplate">
+      <div class="sm:col-span-2">
+          <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">DONATIONS</label>
+          <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+      </div>
+  </template>
+
+    <form class="form">
+      <h1 class="text-center">Registration Form</h1>
+      <!-- Progress bar -->
+      <div class="progressbar">
+        <div class="progress" id="progress"></div>
+        
+        <div
+          class="progress-step progress-step-active"
+          data-title="Event details"
+        ></div>
+        <div class="progress-step" data-title="Tickets"></div>
+        <div class="progress-step" data-title="Event dashboard"></div>
+      </div>
+
+      <!-- Steps -->
+      
+      <!-- step 1 -->
+      <div class="form-step form-step-active h-full">
+        <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+          <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Add your event details</h2>
+          <div class="">hh</div>
+        </div>
+
+        <div class="">
+          <div class="btn btn-next w-1/2 ml-auto">Next</div>
+        </div>
+      </div>
+      <!--  step 2 -->
+      <div class="form-step h-full">
+
+          <section class="bg-white dark:bg-gray-900 ">
+            <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+                <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Tickets</h2>
+
+                    <div class="grid gap-4 sm:grid-cols-2 sm:gap-6" id="ticketscontainer">
+        
+                    </div>
+
+                <button  type="button" id="paid" class="inline-flex items-center text-black bg-gray-200 px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium
+                text-center dark:text-white dark:bg-cyan-900 rounded-lg focus:ring-4 focus:ring-primary-200 
+                dark:focus:ring-primary-900 hover:bg-primary-800">
+                Add Paid ticket
+                </button>   
+                <button id="free" class="inline-flex items-center text-black bg-gray-200 px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium
+                text-center dark:text-white dark:bg-cyan-900 rounded-lg focus:ring-4 focus:ring-primary-200 
+                dark:focus:ring-primary-900 hover:bg-primary-800">
+                Add free ticket
+                </button>   
+                <button id="donations" class="inline-flex items-center text-black bg-gray-200 px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium
+                text-center dark:text-white dark:bg-cyan-900 rounded-lg focus:ring-4 focus:ring-primary-200 
+                dark:focus:ring-primary-900 hover:bg-primary-800">
+                Collect donations
+                </button>   
+            </div>
+          </section>
+
+        <div class="grid grid-cols-2 gap-6">
+          <div class="btn btn-prev">Previous</div>
+          <input type="submit" value="Submit" class="btn" />
+        </div>
+      </div>
+
+    </form>
+  </body>
+
+  <script>
+const prevBtns = document.querySelectorAll(".btn-prev");
+const nextBtns = document.querySelectorAll(".btn-next");
+const progress = document.getElementById("progress");
+const formSteps = document.querySelectorAll(".form-step");
+const progressSteps = document.querySelectorAll(".progress-step");
+
+let formStepsNum = 0;
+
+nextBtns.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    formStepsNum++;
+    updateFormSteps();
+    updateProgressbar();
+  });
+});
+
+prevBtns.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    formStepsNum--;
+    updateFormSteps();
+    updateProgressbar();
+  });
+});
+
+function updateFormSteps() {
+  formSteps.forEach((formStep) => {
+    formStep.classList.contains("form-step-active") &&
+      formStep.classList.remove("form-step-active");
+  });
+
+  formSteps[formStepsNum].classList.add("form-step-active");
+}
+
+function updateProgressbar() {
+  progressSteps.forEach((progressStep, idx) => {
+    if (idx < formStepsNum + 1) {
+      progressStep.classList.add("progress-step-active");
+    } else {
+      progressStep.classList.remove("progress-step-active");
+    }
+  });
+
+  const progressActive = document.querySelectorAll(".progress-step-active");
+
+  progress.style.width =
+    ((progressActive.length - 1) / (progressSteps.length - 1)) * 100 + "%";
+}
+  </script>
+  
+  <script>
+    const paidButton = document.getElementById('paid');
+    const freeButton = document.getElementById('free');
+    const donationsButton = document.getElementById('donations');
+    const container = document.getElementById('ticketscontainer');
+    const paidtemplate = document.getElementById('paidtemplate');
+    const freetemplate = document.getElementById('freetemplate');
+    const donationstemplate = document.getElementById('donationstemplate');
+    
+    paidButton.addEventListener('click', function() {
+      // Clone the template content
+      const clone = document.importNode(paidtemplate.content, true);
+      const newdiv = document.createElement('div');
+      newdiv.append(clone)
+      const deletebtn = document.createElement('button')
+      deletebtn.innerHTML = 'DELETE'
+      
+        deletebtn.addEventListener('click',()=>{
+            const parentdiv = deletebtn.parentElement
+            parentdiv.parentNode.removeChild(parentdiv)
+        })
+
+        newdiv.append(deletebtn)
+      // Append the cloned content to the container
+      container.appendChild(newdiv);
+    });
+
+    freeButton.addEventListener('click', function() {
+      // Clone the template content
+      const clone = document.importNode(freetemplate.content, true);
+      const newdiv = document.createElement('div');
+      newdiv.append(clone)
+      const deletebtn = document.createElement('button')
+      deletebtn.innerHTML = 'DELETE'
+      
+        deletebtn.addEventListener('click',()=>{
+            const parentdiv = deletebtn.parentElement
+            parentdiv.parentNode.removeChild(parentdiv)
+        })
+
+        newdiv.append(deletebtn)
+      // Append the cloned content to the container
+      container.appendChild(newdiv);
+    });
+
+    donationsButton.addEventListener('click', function() {
+      // Clone the template content
+      const clone = document.importNode(donationstemplate.content, true);
+      const newdiv = document.createElement('div');
+      newdiv.append(clone)
+      const deletebtn = document.createElement('button')
+      deletebtn.innerHTML = 'DELETE'
+      
+        deletebtn.addEventListener('click',()=>{
+            const parentdiv = deletebtn.parentElement
+            parentdiv.parentNode.removeChild(parentdiv)
+        })
+
+        newdiv.append(deletebtn)
+      // Append the cloned content to the container
+      container.appendChild(newdiv);
+    });
+    
+</script>
+
+</html>

@@ -1,27 +1,57 @@
+{% extends "base.html" %}
 
-{% load static %}
+{%block title%}
+<title>Register</title>
+{% endblock%}
 
-	{% block title %}
-		<title>Register</title>
-	{% endblock %}
+{% block content %}
 
-	{% block css %}
-	<link rel="stylesheet" type="text/css" href="{% static 'register-login.css' %}">
-	{% endblock %}
+<div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8" style="margin-bottom: 200px;">
+    <div class="mx-auto max-w-lg">
+      <h1 class="text-center text-2xl font-bold text-indigo-600 sm:text-3xl">
+        Get started today
+      </h1>
+  
+      <p class="mx-auto mt-4 max-w-md text-center text-gray-500">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati sunt
+        dolores deleniti inventore quaerat mollitia?
+      </p>
+  
+      <form action="" method="POST" class="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8">
+        {% csrf_token %}
 
-	{% block content %}
-	<form class="form">
-		<span class="signup">Register</span>
-		Email
-		<input type="email" placeholder="Email address" class="form--input">
-		Password
-		<input type="password" placeholder="Password" class="form--input">
-		Confirm password
-		<input type="password" placeholder="Confirm password" class="form--input">
-	
-		<button class="form--submit">
-			Sign up
-		</button>
-	</form>
-	{% endblock %}
+        <p class="text-center text-lg font-medium">Sign in to your account</p>
+  
+        <div>
+          <label for="email" class="sr-only">Email</label>
+          <div class="relative">
+            <input type="email" name="email"  required class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm" placeholder="Enter email"/>
+          </div>
+        </div>
+        <div>
+          <label for="email" class="sr-only">Email</label>
+          <div class="relative">
+            <input type="password" name="password1" required class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm" placeholder="Enter password"/>
+          </div>
+        </div>
+  
+        <div>
+          <label for="password" class="sr-only">Password</label>
+          <div class="relative">
+            <input type="password" name="password2" required class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm" placeholder="Re-type password"/>
+          </div>
+        </div>
+  
+        <button type="submit" class="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white">
+          Sign up
+        </button>
+  
+        <p class="text-center text-sm text-gray-500" >
+          Already have an account?
+          <a class="underline" href="{% url 'login' %}">Login</a>
+        </p>
+      </form>
+    </div>
+  </div>
 
+{% endblock%}

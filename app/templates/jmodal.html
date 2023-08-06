@@ -1,0 +1,337 @@
+{% extends "base.html" %}
+
+{% block title%}
+<title>Tickets</title>
+{% endblock%}
+
+{% block content%}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<style>
+.m-progress-bar {
+    min-height: 1em;
+    background: #86de47;
+    width: 5%;
+}
+</style>
+
+    
+
+<form class="modal multi-step" id="Ticketmodal" data-backdrop="static" action="{% url 'checkout' %}" method="POST">
+    {% csrf_token%}
+    <div class="modal-dialog" style="width: 80%;margin-top:15px;">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: cadetblue;">
+                <h4 class="modal-title step-1" data-step="1">Tickets</h4>
+                <h4 class="modal-title step-2" data-step="2">Step 2</h4>
+                <div class="m-progress">
+                    <div class="m-progress-bar-wrapper">
+                        <div class="m-progress-bar">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body step-1 flex w-[90%] h-[50%] my-[20px] mx-auto overflow-y-scroll" data-step="1">
+                <div class="ticket-list " style="background: #86de47; width: 50%;">
+                    <div class="p-6 space-y-6">
+                        {% for ticket in tickets%}
+                          <div id="ticket-{{ forloop.counter }}" class="ticket justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
+                              <div class="sm:ml-4 sm:flex sm:w-full sm:justify-between">
+                                <div class="mt-5 sm:mt-0">
+                                  <h2 class="text-lg font-bold text-gray-900">{{ticket.name}}</h2>
+                                  <p class="ticket_price mt-1 text-xs text-gray-700">{{ticket.price}}</p>
+                                </div>
+                                <div class="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
+                                  <div class="flex items-center border-gray-100">
+                                    <button class="decrease_btn cursor-pointer rounded-l bg-gray-200 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50 disabled:hover:bg-slate" type="button"> - </button>
+                                    <span class="item_count rounded-l bg-gray-50 py-1 px-3.5 duration-100"> 0 </span>
+                                    <button class="increase_btn cursor-pointer rounded-r bg-gray-200 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50" type="button"> + </button>
+                                  </div>
+                              </div>
+                            </div>
+                          </div>
+                        {% endfor%}
+                    </div>
+                </div>
+                <!-- order summary -->
+                <div class="price-info flex flex-col w-1/2">
+                    <!-- summary header -->
+                    <div class="summary-header w-full bg-green-950">
+                        <span>Summary</span>
+                        <span>QTY</span> 
+                        <span>Amount</span>
+                    </div>
+                    {% for ticket in tickets%}
+                    <div class="ticket-{{ forloop.counter }} summary-content flex">
+                        <span class="m-1">Ticket #{{ forloop.counter }} {{ticket.name}}</span>,
+                        <span class="ticket-qty m-1">0</span>,
+                        <span class="ticket-amount m-1">0</span>
+                    </div>
+                    {% endfor%}
+
+                    Ticket quantity:<span id="cart_total_count">0</span>
+                    Total:UGX.<span id="cart_total_amount">0</span>
+
+                </div>
+            </div>
+            <div id="info" class="modal-body step-2" data-step="2" style="width: 90%;height: 400px;margin: 0 auto;overflow-y: scroll;">
+
+            </div>
+            <!-- <div class="modal-body step-3" data-step="3" style="width: 90%;height: 400px;background: rgb(226, 84, 14);margin: 0 auto;">
+                This is the final step.
+            </div> -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary step step-2" data-step="2" onclick="sendEvent('#demo-modal-3', 1)">Back</button>
+                <button type="button" class="btn btn-primary step step-1" data-step="1" onclick="sendEvent('#demo-modal-3', 2)">Continue</button>
+                <button type="submit" class="btn btn-primary step step-2" data-step="2" onclick="sendEvent('#demo-modal-3', 3)">Continue</button>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="container">
+    <div class="row">
+        <h1>
+            EVENT
+        </h1>
+        <button class="btn btn-default" data-toggle="modal" data-target="#Ticketmodal">Show</button>
+    </div>
+</div>
+<script>
+sendEvent = function(sel, step) {
+    var sel_event = new CustomEvent('next.m.' + step, {detail: {step: step}});
+    window.dispatchEvent(sel_event);
+}
+</script>
+<script>
+    +function($) {
+        'use strict';
+    
+        var modals = $('.modal.multi-step');
+    
+        modals.each(function(idx, modal) {
+            var $modal = $(modal);
+            var $bodies = $modal.find('div.modal-body');
+            var total_num_steps = $bodies.length;
+            var $progress = $modal.find('.m-progress');
+            var $progress_bar = $modal.find('.m-progress-bar');
+            var $progress_stats = $modal.find('.m-progress-stats');
+            var $progress_current = $modal.find('.m-progress-current');
+            var $progress_total = $modal.find('.m-progress-total');
+            var $progress_complete  = $modal.find('.m-progress-complete');
+            var reset_on_close = $modal.attr('reset-on-close') === 'true';
+    
+            function reset() {
+                $modal.find('.step').hide();
+                $modal.find('[data-step]').hide();
+            }
+    
+            function completeSteps() {
+                $progress_stats.hide();
+                $progress_complete.show();
+                $modal.find('.progress-text').animate({
+                    top: '-2em'
+                });
+                $modal.find('.complete-indicator').animate({
+                    top: '-2em'
+                });
+                $progress_bar.addClass('completed');
+            }
+    
+            function getPercentComplete(current_step, total_steps) {
+                return Math.min(current_step / total_steps * 100, 100) + '%';
+            }
+    
+            function updateProgress(current, total) {
+                $progress_bar.animate({
+                    width: getPercentComplete(current, total)
+                });
+                if (current - 1 >= total_num_steps) {
+                    completeSteps();
+                } else {
+                    $progress_current.text(current);
+                }
+    
+                $progress.find('[data-progress]').each(function() {
+                    var dp = $(this);
+                    if (dp.data().progress <= current - 1) {
+                        dp.addClass('completed');
+                    } else {
+                        dp.removeClass('completed');
+                    }
+                });
+            }
+    
+            function goToStep(step) {
+                reset();
+                var to_show = $modal.find('.step-' + step);
+                if (to_show.length === 0) {
+                    // at the last step, nothing else to show
+                    return;
+                }
+                to_show.show();
+                var current = parseInt(step, 10);
+                updateProgress(current, total_num_steps);
+                findFirstFocusableInput(to_show).focus();
+            }
+    
+            function findFirstFocusableInput(parent) {
+                var candidates = [parent.find('input'), parent.find('select'),
+                                  parent.find('textarea'),parent.find('button')],
+                    winner = parent;
+                $.each(candidates, function() {
+                    if (this.length > 0) {
+                        winner = this[0];
+                        return false;
+                    }
+                });
+                return $(winner);
+            }
+    
+            function bindEventsToModal($modal) {
+                var data_steps = [];
+                $('[data-step]').each(function() {
+                    var step = $(this).data().step;
+                    if (step && $.inArray(step, data_steps) === -1) {
+                        data_steps.push(step);
+                    }
+                });
+    
+                $.each(data_steps, function(i, v) {
+                    window.addEventListener('next.m.' + v, function (evt) {
+                        goToStep(evt.detail.step);
+                    }, false);
+                });
+            }
+    
+            function initialize() {
+                reset();
+                updateProgress(1, total_num_steps);
+                $modal.find('.step-1').show();
+                $progress_complete.hide();
+                $progress_total.text(total_num_steps);
+                bindEventsToModal($modal, total_num_steps);
+                $modal.data({
+                    total_num_steps: $bodies.length,
+                });
+                if (reset_on_close){
+                    //Bootstrap 2.3.2
+                    $modal.on('hidden', function () {
+                        reset();
+                        $modal.find('.step-1').show();
+                    })
+                    //Bootstrap 3
+                    $modal.on('hidden.bs.modal', function () {
+                        reset();
+                        $modal.find('.step-1').show();
+                    })
+                }
+            }
+    
+            initialize();
+        })
+    }(jQuery);
+</script>
+<!-- Cart  js-script -->
+<script>
+    const increase_btns = document.querySelectorAll('.increase_btn');
+    const decrease_btns = document.querySelectorAll('.decrease_btn');
+    const priceInfo = document.querySelector('.price-info');
+    
+
+    increase_btns.forEach((button)=>{
+        button.addEventListener('click',()=>{
+          var price = button.closest('.ticket').querySelector('.ticket_price').textContent
+          var itemCount = button.parentElement.querySelector('.item_count');
+          const parent_id = button.closest('.ticket').id;
+          var ticketSummary = document.querySelector(`.${parent_id}`);
+        
+          var count = parseInt(itemCount.textContent);
+          count++;
+          itemCount.textContent = count;
+          var total = count*price;
+          ticketSummary.querySelector('.ticket-qty').innerHTML = count;
+          ticketSummary.querySelector('.ticket-amount').innerHTML = total;
+        //   console.log(count === 0)
+        //   decrease_btn = button.closest('ticket').querySelector('.decrease_btn')
+        //   decrease_btn.disabled = count === 0;
+
+        UpdateCartTotal();
+        updateTicketTypes();
+        });
+    });
+
+    decrease_btns.forEach((button)=>{
+        button.addEventListener('click',()=>{
+            var price = button.closest('.ticket').querySelector('.ticket_price').textContent;
+            var itemCount = button.parentElement.querySelector('.item_count');
+            const parent_id = button.closest('.ticket').id;
+            var ticketSummary = document.querySelector(`.${parent_id}`);
+          
+            var count = parseInt(itemCount.textContent);
+            count--;
+            itemCount.textContent = count;
+            var total = count*price;
+            ticketSummary.querySelector('.ticket-qty').innerHTML = count;
+            ticketSummary.querySelector('.ticket-amount').innerHTML = total;
+            button.disabled = count === 0;
+            UpdateCartTotal();
+            updateTicketTypes();
+        });
+    });
+
+
+    // Cart summary
+    function UpdateCartTotal(){
+        var totalTicketQunatity = 0;
+        var totalTicketsAmount = 0;
+        const ticketCountElements = document.querySelectorAll('.item_count'); // check on using var or const in future in case of variable ticket count
+        const totalAmountElements = document.querySelectorAll('.ticket-amount');
+        ticketCountElements.forEach(count=>{
+            totalTicketQunatity += parseInt(count.innerHTML)
+        });
+
+        totalAmountElements.forEach(count=>{
+            totalTicketsAmount += parseInt(count.innerHTML);
+        });
+        document.querySelector('#cart_total_count').innerHTML = totalTicketQunatity;
+        document.querySelector('#cart_total_amount').innerHTML = totalTicketsAmount;
+
+    }
+
+    function updateTicketTypes(){
+        var ticketTypes = {};
+        var count = document.querySelectorAll('.ticket').length;
+        for(let num = 1 ;num<=count;num++){
+            ticketTypes[`ticket-${num}`] = parseInt(document.querySelector(`.ticket-${num}`).querySelector('.ticket-qty').innerHTML);
+        }
+        userInfo(ticketTypes);
+    }
+
+    // Customer info
+    function userInfo(ticketTypes){
+        const infoDiv = document.getElementById('info');
+        infoDiv.innerHTML = '';
+        
+        for(let key in ticketTypes){
+            if(ticketTypes[key] !== 0){
+                const title = `<div"> ${key} </div>`;
+                infoDiv.innerHTML += title;
+            }
+            for (let i = 0; i < ticketTypes[key]; i++) {
+                const divContent = `
+                    <div style="width: 100%; height: 80px; background: blue;margin-bottom:5px">
+                    A DIV FOR USER 
+                    </div>
+                `;
+                infoDiv.innerHTML += divContent;
+                }
+            }
+    }
+
+    
+</script>
+{% endblock %}
