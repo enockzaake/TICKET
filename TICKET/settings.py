@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ca#xa6ox)r_0*j)24^=3jyd(bo7f%g&0n$$a^av7t0p^p_v3&x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True # change to flase for custom pages to work
+DEBUG = True # change to false for custom pages to work
 
 ALLOWED_HOSTS = ['*']
 
@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'app',
     'custom_auth',  # app for user authentication and api related stuff
     'compressor',
-    # 'debug_toolbar'
+    'debug_toolbar'
 
 ]
 

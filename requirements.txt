@@ -36,7 +36,6 @@ python-barcode==0.14.0
 python-dateutil==2.8.2
 python-Levenshtein==0.20.9
 pytz==2023.3
-pywin32==305
 pyzmq==25.0.0
 rapidfuzz==2.13.7
 rcssmin==1.1.1

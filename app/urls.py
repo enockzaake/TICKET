@@ -17,7 +17,12 @@ urlpatterns = [
     path('event_admin/edit-profile',views.editprofile,name='edit-profile'),
     path('checkout/',views.checkout,name='checkout'),
     path('payment/',views.payment,name='payment'),
-    path('callback/',views.callback_url,name='callback')
+    path('callback/',views.callback_url,name='callback'),
+
+    path('edit_event/<id>/',views.edit_event,name='edit_event')
+
+
+
 ]
 
 handler404 = 'app.views.handler404'

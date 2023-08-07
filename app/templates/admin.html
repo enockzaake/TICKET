@@ -18,14 +18,14 @@
             </div>
             <ul>
                 <li class="btn mb-2 rounded hover:shadow bg-gray-800">
-                    <a href="" class="inline-block w-full h-full px-3 py-2 font-bold text-white">
+                    <a href="{% url 'event_admin' %}" class="inline-block w-full h-full px-3 py-2 font-bold text-white">
                         <button type="button">
                             <svg xmlns="http://www.w3.org/2000/svg" class="inline-block w-6 h-6 mr-2 -mt-2"
                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                             </svg>
-                            Home
+                            Homes
                         </button>
                     </a>
                 </li>
@@ -42,7 +42,7 @@
                     </a>
                 </li>
                 <li class="btn mb-2 rounded hover:shadow">
-                    <a href="" class="inline-block w-full h-full px-3 py-2 font-bold text-white">
+                    <a href="{% url 'edit-profile' %}" class="inline-block w-full h-full px-3 py-2 font-bold text-white">
                         <button type="button">
                             <svg xmlns="http://www.w3.org/2000/svg" class="inline-block w-6 h-6 mr-2 -mt-2"
                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -134,11 +134,14 @@
                                         class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
                                         Status</th>
                                     <th
+                                 
                                         class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-                                        Edit</th>
+                                        Edit
+                                    </th>
                                     <th
                                         class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-                                        Delete</th>
+                                        Delete
+                                    </th>
                                 </tr>
                             </thead>
 
@@ -172,15 +175,16 @@
                                     
                                     <!-- EDIT -->
                                     <td
-                                        class="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
-                                        <a href="/">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-400 hover:text-blue-700"
-                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    <button type="button" onclick="getEventFields('{{event.id}}')"
+                                        data-modal-target="staticModal" data-modal-toggle="staticModal" class="px-6 py-6 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-400 hover:text-blue-700"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
-                                        </a>
+                                    </button>
+       
                                     </td>
                                     <!-- DELETE -->
                                     <td
@@ -215,6 +219,80 @@
     </div>
 </div>
 
+<!-- EDIT EVENT MODAL -->
+<div id="staticModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    Edit event details
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="staticModal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <form method="POST" id="formdata" class="p-1" action="{% url 'edit_event' 1 %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                  <div class="p-4 ">
+                    <div class="step1 space-y-1">
+                      <div>
+                        <label for="name" class="block text-md font-medium text-gray-700">Event name</label>
+                        <input type="text" id="name" name="name" placeholder="Enter event name" class="mt-1 p-2 block w-full h-10 border-gray-300 rounded-sm focus:ring-indigo-100 sm:text-sm">
+                      </div>
+                      <div>
+                        <label for="event_description" class="block text-sm font-medium text-gray-700">Event Description</label>
+                        <textarea id="event_description" name="event_description" placeholder="Enter the event description" class="mt-1 block w-full h-36 border-gray-300 rounded-sm  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+                      </div>
+                      <div>
+                        <label for="start_datetime" class="block text-sm font-medium text-gray-700">Start Date and Time</label>
+                        <input type="datetime-local" id="start_datetime" name="start_datetime" class="mt-1 p-2 block w-full h-10 border-gray-300 rounded-sm  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" onchange="formatDateTime(this)">
+                      </div>
+                      <div>
+                        <label for="end_datetime" class="block text-sm font-medium text-gray-700">End Date and Time</label>
+                        <input type="datetime-local" id="end_datetime" name="end_datetime" class="mt-1 block w-full h-10 border-gray-300 rounded-sm  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" >
+                      </div>
+                      <div>
+                        <label for="venue" class="block text-sm font-medium text-gray-700">Venue</label>
+                        <input type="text" id="venue" name="venue" placeholder="Enter the event venue" class="mt-1 p-2 block w-full h-10 border-gray-300 rounded-sm  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                      </div>
+                      <div>
+                        <label for="event_banners" class="block text-sm font-medium text-gray-700">New Event Banner</label>
+                        <input type="file" id="event_banners" name="event_banner" class="block w-full h-10 cursor-pointer  border-gray-300 rounded-sm  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <div id="image-preview" class="flex items-center justify-center w-full mt-4">
+                          <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg  bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                              <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                  <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                  </svg>
+                                  <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                              </div>
+                          </label>
+                      </div> 
+                      </div>
+                      <div>
+                        <label for="age_restriction" class="block text-sm font-medium text-gray-700">Age Restriction</label>
+                        <input type="text" id="age_restriction" name="age_restriction" placeholder="Enter age restriction (if any)" class="mt-1 p-2 block w-full h-10 border-gray-300 rounded-md  focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                      </div>
+              
+                    </div>
+                  </div>
+                  <!-- Modal footer -->
+                  <div class="flex justify-between p-6 space-x-2 border-t border-gray-200">
+                      <button type="button" data-modal-hide="staticModal" class="text-gray-500 bg hover:bg-gray-100 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">Cancel</button>
+                      <button type="submit" class="hover:bg-blue-100 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">SUBMIT</button>
+                  </div>
+            </form>
+        </div>
+    </div>
+  </div>
+
+
 <script>
     // const home = document.querySelector(".home");
     // const myTickets = document.querySelector(".myTicktets");
@@ -233,5 +311,82 @@
 
 
 </script>
+<script>
+    // Function to preview the selected image
+    function previewImage() {
+      var fileInput = document.getElementById('event_banners');
+      var imagePreview = document.getElementById('image-preview');
 
-{% endblock%}
+      // Check if a file is selected
+      if (fileInput.files && fileInput.files[0]) {
+        var reader = new FileReader();
+
+        // When the file is read, set the image source and display it
+        reader.onload = function(e) {
+          var img = new Image();
+          img.src = e.target.result;
+
+          // Set the width and height attributes
+          img.onload = function() {
+            // var maxWidth = 500;
+            // var maxHeight = 500;
+            // var width = img.width;
+            // var height = img.height;
+
+            // // Calculate the new dimensions if necessary
+            // if (width > maxWidth || height > maxHeight) {
+            //   var ratio = Math.min(maxWidth / width, maxHeight / height);
+            //   width = Math.round(width * ratio);
+            //   height = Math.round(height * ratio);
+            // }
+
+            // // Create the img element with width and height attributes
+            // var imgElement = '<img src="' + img.src + '" width="' + width + '" height="' + height + '" class="max-w-full max-h-full">';
+
+            // // Display the image
+            imagePreview.innerHTML = `<img src="${img.src}" class="w-full h-full">`;
+          };
+        };
+
+        // Read the image file as a data URL
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        // If no file is selected, clear the image preview
+        imagePreview.innerHTML = '';
+      }
+    }
+
+    // Attach the previewImage function to the change event of the file input
+    document.getElementById('event_banners').addEventListener('change', previewImage);
+</script>
+
+<script>
+    function convertUTCToLocal(utcDateString) {
+        const date = new Date(utcDateString);
+        const localDateString = date.toISOString().slice(0, 16);
+        return localDateString;
+    }
+    const now = new Date().toISOString().slice(0, 16);    
+    document.getElementById('start_datetime').setAttribute('min', now);
+    document.getElementById('end_datetime').setAttribute('min', now);
+    function getEventFields(id){
+    fetch(`/edit_event/${id}/`)
+    .then(res=>res.json())
+    .then(data=>{
+        const fields = data['event']['fields'];
+        document.getElementById('name').value = fields.name;
+        document.getElementById('event_description').value = fields.event_description;
+        document.getElementById('venue').value = fields.venue;
+        // document.getElementById('event_banner').value = fields.event_banners;
+        document.getElementById('start_datetime').value = convertUTCToLocal(fields.start_datetime);
+        document.getElementById('end_datetime').value = convertUTCToLocal(fields.end_datetime);
+        document.getElementById('age_restriction').value = fields.age_restriction;
+
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+    }
+
+</script>
+{% endblock%}   

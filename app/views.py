@@ -15,6 +15,9 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import Event,Ticket
 from django.conf import settings
+from django.http import JsonResponse
+from django.core.serializers import serialize
+import json
 
 def generate_ticket_number():
     return ''.join(random.choices(string.ascii_letters + string.digits, k=10))
@@ -122,7 +125,7 @@ def modal(request):
     # tickets = event.ticket_set.all() # to access tickets via reverse relationship
     return render(request,'flowmodal.html',{'event':event})
 
-def event_admin(request):
+def event_admin (request):
     events = Event.objects.filter(event_organiser = request.user.id)
     return render(request,'admin.html',{'events':events})
 
@@ -161,3 +164,23 @@ def editprofile(request):
 def myTickets(request):
     return render(request,'edit-profile.html')
     
+
+def edit_event(request,id):
+    if request.method == 'GET':
+        try:
+            # Add redis cache to limit queries being made for same resource
+            event = Event.objects.get(pk=id)
+            event_json = serialize('json',[event])
+            return JsonResponse({'event':json.loads(event_json)[0]})
+        except Event.DoesNotExist:
+            return JsonResponse({'Error':'Event not found'})
+    else:
+        print("NAME:",request.POST['name'])
+        return JsonResponse({'Error':'Event not found'})
+
+
+
+
+
+   
+
