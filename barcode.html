@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barcode Reader</title>
+</head>
+<body>
+<div id="barcode-result"></div>
+<video id="camera-preview" autoplay></video>
+<button id="start-scan">Start Scan</button>
+
+<script src="https://cdn.jsdelivr.net/npm/quagga/dist/quagga.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const barcodeResult = document.getElementById("barcode-result");
+  const cameraPreview = document.getElementById("camera-preview");
+  const startScanButton = document.getElementById("start-scan");
+
+  let scanning = false;
+
+  // Access the camera
+  function startCamera() {
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+      .then(function(stream) {
+        cameraPreview.srcObject = stream;
+        startScanButton.disabled = false;
+      })
+      .catch(function(error) {
+        console.error("Camera access error:", error);
+      });
+  }
+
+  startScanButton.addEventListener("click", function() {
+    if (!scanning) {
+      scanning = true;
+      startScanButton.disabled = true;
+      
+      // Configure and start QuaggaJS
+      Quagga.init({
+        inputStream: {
+          name: "Live",
+          type: "LiveStream",
+          target: cameraPreview,
+        },
+        decoder: {
+          readers: ["ean_reader", "code_128_reader", "upc_reader", "code_39_reader"],
+        },
+      }, function(err) {
+        if (err) {
+          console.error("Quagga initialization failed:", err);
+          return;
+        }
+        Quagga.start();
+      });
+
+      // Listen for barcode detection
+      Quagga.onDetected(function(result) {
+        const code = result.codeResult.code;
+        barcodeResult.textContent = "Detected Barcode: " + code;
+        // Send barcode to backend for querying
+        fetch(`/queryBarcode/${code}`)
+            .then(response => response.json())
+            .then(data => {
+            // Display database results on the screen
+            barcodeResult.textContent = `Detected Barcode: ${code}\nDatabase Result: ${data}`;
+            })
+            .catch(error => {
+            console.error('Error querying barcode:', error);
+            });
+        Quagga.stop();
+        scanning = false;
+        startScanButton.disabled = false;
+      });
+    }
+  });
+
+  startCamera();
+});
+</script>
+</body>
+</html>

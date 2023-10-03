@@ -32,13 +32,16 @@
     <a href="{% url 'event-details' id=event.id %}">
       <div class="mx-auto  w-80 transform overflow-hidden rounded-lg bg-white dark:bg-slate-800 shadow-md duration-300 hover:scale-105 hover:shadow-lg">
       <img class="h-48 w-full object-cover object-center" src="{% static 'img/img1.jpeg' %}" alt="Event Image" />
-      <div class="p-4">
+
+      <div class="p-2">
         <h2 class="mb-2 text-lg font-medium dark:text-white text-gray-900">{{event.name}}</h2>
-        <p class="mb-2 text-base dark:text-gray-300 text-gray-700">{{event.venue}}</p>
+        <span class="mb-2 text-md text-gray-700">{{event.venue}}</span>
+
         <div class="flex items-center">
-          <p class="mr-2 text-lg font-semibold text-gray-900 dark:text-white">$20.00</p>
+          <p class="mr-2 text-sm text-gray-700">{{event.start_datetime}}</p>
         </div>
       </div>
+
       </div>
     </a>
     {% endfor %}

@@ -30,9 +30,9 @@ DEBUG = True # change to false for custom pages to work
 ALLOWED_HOSTS = ['*']
 
 
-# INTERNAL_IPS = [
-#    '127.0.0.1',
-# ]
+INTERNAL_IPS = [
+   '127.0.0.1',
+]
 
 # AppliPtion definition
 

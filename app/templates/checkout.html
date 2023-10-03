@@ -11,10 +11,13 @@
 
             <form class="p-2 space-y-2" action="{% url 'payment' %}" method="POST">
                 {% csrf_token %}
-                <input class="focus:ring-2 focus:ext-blue-600  px-2 border-b border-gray-200 leading-4 text-base placeholder-gray-600 py-4 w-full" type="email" placeholder="Email" required/>
+
+                <input type="hidden" id="event-data" name="json_data">
+
+                <input class="focus:ring-2 focus:ext-blue-600  px-2 border-b border-gray-200 leading-4 text-base placeholder-gray-600 py-4 w-full" type="email" name="email" placeholder="Email" required/>
 
                 <label class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer hover:text-gray-600 hover:bg-gray-100 focus-within:text-blue-600 focus-within:border-blue-600 group">
-                    <input type="radio" id="hosting-small" name="hosting" value="hosting-small" class="peer" required>
+                    <input type="radio" id="" name="payment_method" value="mobile-money" class="peer" required>
                     <div class="block peer-checked:text-blue-600">
                       <div class="w-full text-lg font-semibold ">Mobile Money</div>
                       <div class="w-full ">Safaricom/Airtel/MTN</div>
@@ -24,7 +27,7 @@
                     </svg>
                 </label>
                 <label class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer hover:text-gray-600 hover:bg-gray-100 focus-within:text-blue-600 focus-within:border-blue-600 group">
-                    <input type="radio" id="hosting-small" name="hosting" value="hosting-small" class="peer" required>
+                    <input type="radio" id="" name="payment_method" value="card" class="peer" required>
                     <div class="block peer-checked:text-blue-600">
                       <div class="w-full text-lg font-semibold ">CARD</div>
                       <div class="w-full ">Visa/Mastercard/Amex</div>
@@ -34,7 +37,7 @@
                     </svg>
                 </label>
                     <label class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer hover:text-gray-600 hover:bg-gray-100 focus-within:text-blue-600 focus-within:border-blue-600 group">
-                        <input type="radio" id="hosting-small" name="hosting" value="hosting-small" class="peer" required>
+                        <input type="radio" id="" name="payment_method" value="bank transfer" class="peer" required>
                         <div class="block peer-checked:text-blue-600">
                         <div class="w-full text-lg font-semibold ">Bank transfer</div>
                         <div class="w-full ">All banks</div>
@@ -50,7 +53,7 @@
             </form>
 
 
-            <button  onclick="getPaymentDetails(this)" class="mt-8 text-base font-medium focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 hover:bg-black leading-4 py-4 w-full md:w-4/12 lg:w-full text-white bg-gray-800" type="button">Complete payment</button>
+            <button  onclick="getPaymentDetails(this)" class="mt-8 text-base font-medium focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 hover:bg-black leading-4 py-4 w-full md:w-4/12 lg:w-full text-white bg-gray-800" type="button">Next</button>
             <div class="mt-4 flex justify-between items-center w-full">
 
             </div>
@@ -64,7 +67,7 @@
             </div>
             <div class="flex mt-7 flex-col items-end w-full space-y-6">
                 <div class="flex justify-between w-full items-center">
-                    <p class="text-lg dark:text-gray-300 leading-4 text-gray-600">Tickey quantity</p>
+                    <p class="text-lg dark:text-gray-300 leading-4 text-gray-600">Ticket quantity</p>
                     <p class="ticket-qty text-lg dark:text-gray-300 font-semibold leading-4 text-gray-600">0</p>
                 </div>
                 <div class="flex justify-between w-full items-center">
@@ -103,4 +106,27 @@
     document.querySelector('.total').innerHTML = (parseInt(order_summary['ticket_quantity'])*500) + parseInt(order_summary['total_amount']) ;
 
 </script>
+<script>
+    document.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault();
+    
+    
+        const event_data_json= document.querySelector('#event-data');
+        // jsonInput.value = localStorage.getItem('ticket_ids');
+
+        event_data = {};
+        event_data['event_id'] = JSON.parse(localStorage.getItem('event_id'));
+        event_data['ticket_ids'] = JSON.parse(localStorage.getItem('ticket_ids'));
+        event_data['order_summary'] = JSON.parse(localStorage.getItem('order_summary'));
+        event_data_json.value = JSON.stringify(event_data);
+    
+        // Now manually submit the form
+        this.submit();
+        this.reset()
+        localStorage.removeItem('event_id');
+        localStorage.removeItem('ticket_ids');
+        localStorage.removeItem('order_summary')
+    });
+    </script>
+    
 {% endblock %}

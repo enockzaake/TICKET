@@ -6,58 +6,53 @@
 
 {% block content %}
 
-<section class="">
+<section class="bg-white dark:bg-gray-800">
     <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
-        <h2 class="mb-4 text-xl font-bold text-gray-900">Add your event details</h2>
-        <form action="#" class="">
-            <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
-                <div class="sm:col-span-2">
-                    <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Event Name</label>
-                    <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
-                </div>
-
-                <div class="sm:col-span-2">
-                    <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Event Description</label>
-                    <textarea id="description" rows="8" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Your description here"></textarea>
+        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Add your event details</h2>
+        <form action="#" class="space-y-6">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-900 dark:text-white">Event Name</label>
+                    <input type="text" name="name" id="name" class="input-field" placeholder="Type event name" required="">
                 </div>
                 <div>
-                    <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Age restriction</label>
-                    <select id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                        <option selected="">Select category</option>
-                        <option value="TV">16+</option>
-                        <option value="PC">18+</option>
-                        <option value="GA">Couples</option>
+                    <label for="description" class="block text-sm font-medium text-gray-900 dark:text-white">Event Description</label>
+                    <textarea id="description" rows="8" class="input-field" placeholder="Your description here"></textarea>
+                </div>
+                <div>
+                    <label for="age-restriction" class="block text-sm font-medium text-gray-900 dark:text-white">Age restriction</label>
+                    <select id="age-restriction" class="input-field">
+                        <option selected="">Select age restriction</option>
+                        <option value="16+">16+</option>
+                        <option value="18+">18+</option>
+                        <option value="Couples">Couples</option>
                     </select>
                 </div>
-                </div>
-                <div class="sm:col-span-2">
-                    <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Venue Name</label>
-                    <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
-                </div>
-                <div class="sm:col-span-2">
-                    <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Venue Address</label>
-                    <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type product name" required="">
+                <div>
+                    <label for="venue-name" class="block text-sm font-medium text-gray-900 dark:text-white">Venue Name</label>
+                    <input type="text" name="venue-name" id="venue-name" class="input-field" placeholder="Type venue name" required="">
                 </div>
                 <div>
-                    <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Event category</label>
-                    <select id="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                        <option selected="">Select category</option>
-                        <option value="TV">Music</option>
-                        <option value="PC">Charity</option>
-                        <option value="GA">Travel</option>
+                    <label for="venue-address" class="block text-sm font-medium text-gray-900 dark:text-white">Venue Address</label>
+                    <input type="text" name="venue-address" id="venue-address" class="input-field" placeholder="Type venue address" required="">
+                </div>
+                <div>
+                    <label for="event-category" class="block text-sm font-medium text-gray-900 dark:text-white">Event category</label>
+                    <select id="event-category" class="input-field">
+                        <option selected="">Select event category</option>
+                        <option value="Music">Music</option>
+                        <option value="Charity">Charity</option>
+                        <option value="Travel">Travel</option>
                     </select>
                 </div>
             </div>
-            <div class="grid place-items-center">
-            <button type="submit" class="inline-flex items-center text-black bg-gray-200 px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium
-                        text-center dark:text-white dark:bg-cyan-900 rounded-lg focus:ring-4 focus:ring-primary-200 
-                        dark:focus:ring-primary-900 hover:bg-primary-800">
-                Create Event
-            </button>
+            <div class="flex justify-center">
+                <button type="submit" class="btn-create-event">Create Event</button>
             </div>
-
         </form>
     </div>
 </section>
+
+
 
 {% endblock %}
