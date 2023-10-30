@@ -34,10 +34,11 @@ class Event(models.Model):
         return self.name
      
 class Ticket(models.Model):
+    TICKET_TYPES = ( ('PAID','PAID'),('FREE','FREE'),('DONATIONS','DONATIONS') )
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     name = models.CharField(max_length=50)
-    event = models.ForeignKey(Event,null=True,blank=True , on_delete=models.CASCADE,related_name='tickets')      # add to autofill the name of the event that is being created and link it to that
-    ticket_type = models.CharField(max_length=255)  # add choice to pick from the type ticket (FILLS AUTOMATICALLY WHEN CLICK ON CREATE TICKET(PAID/FREE/DONATIONS))
+    event = models.ForeignKey(Event,null=True,blank=True , on_delete=models.CASCADE,related_name='tickets')
+    ticket_type = models.CharField(max_length=255,choices=TICKET_TYPES)  
     price = models.DecimalField(decimal_places=2, max_digits=8)
     quantity_available = models.IntegerField()   # change to number of tickets to be i.e one may buy many tickets of the same type
 
@@ -56,7 +57,7 @@ class Transaction(models.Model):
     id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     customer = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
+    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE) # change to use reverse relationship
     amount = models.DecimalField(decimal_places=2, max_digits=8)
     transaction_datetime = models.DateTimeField(auto_now_add=True)
                                                                                                                                                 
